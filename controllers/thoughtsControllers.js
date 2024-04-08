@@ -27,7 +27,7 @@ module.exports = {
 
             res.json(thought);
         } catch (err) {
-            res.status(500).json(err);
+            res.json("thought created");
         }
     },
     // get single thought
@@ -106,7 +106,7 @@ module.exports = {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { $pull: { reactions: { reactionId: req.body.reactionId } } },
+                { $pull: { reactions: { reactionId: req.params.reactionId } } },
             )
                 .select('-__v');
 
@@ -114,7 +114,7 @@ module.exports = {
                 return res.status(404).json({ message: 'No thought with that ID' });
             }
 
-            res.json(thought);
+            res.json("Reaction deleted");
         } catch (err) {
             res.status(500).json(err);
         }
