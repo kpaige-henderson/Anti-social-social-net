@@ -62,21 +62,17 @@ module.exports = {
         }
     },
     // Delete a user
-    async deleteUser(req, res) {
-        try {
-            const user = await User.findOneAndDelete({ _id: req.params.userId });
+    deleteUser(req, res) {
+        User.findByIdAndDelete(req.params.id)
+          .then((user) => {
             if (!user) {
-                return res.status(404).json({ message: 'No user with ID' });
+              return res.status(404).json({ message: 'No user found with this id!' });
             }
-
-            await Thought.deleteMany({ _id: { $in: user.thoughts } });
-
-            res.status(200).json({ message: 'User deleted!', deleteUserId: user._id });
-            console.log(`Delected user with ID:  ${user._id}`);
-        } catch (err) {
-            res.status(500).json(err);
-        }
-    },
+            res.json({ message: 'User successfully deleted' });
+          })
+          .catch((err) => res.status(500).json(err));
+      },
+      
     // add friend
     async addFriend(req, res) {
         try {
