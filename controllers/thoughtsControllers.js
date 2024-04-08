@@ -4,7 +4,7 @@ module.exports = {
     // Get thoughts
     async getThoughts(req, res) {
         try {
-            const thought = await Thought.find()
+            const thoughts = await Thought.find()
                 .select('-__v');
             res.json(thoughts);
         } catch (err) {
@@ -15,7 +15,7 @@ module.exports = {
     async createThought(req, res) {
         try {
             const thought = await Thought.create(req.body);
-            const user = await User.findOne(
+            const user = await User.findOneAndUpdate(
                 { _id: req.body.userId },
                 { $addToSet: { thoughts: thought_id } },
                 { new: true }
